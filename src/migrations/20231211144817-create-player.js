@@ -1,6 +1,6 @@
 'use strict';
 
-const { AvailableSocialLogins } = require('../constant');
+const { AvailableSocialLogins, UserLoginType } = require('../constant');
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -42,6 +42,7 @@ module.exports = {
 				type: Sequelize.ENUM,
 				allowNull: false,
 				values: AvailableSocialLogins,
+				defaultValue: UserLoginType.EMAIL_PASSWORD,
 			},
 			isEmailVerified: {
 				type: Sequelize.BOOLEAN,

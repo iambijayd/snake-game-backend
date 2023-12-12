@@ -1,6 +1,13 @@
 'use strict';
 const { Model } = require('sequelize');
-const AvailableSocialLogins = require('../constant');
+const jwt = require('jsonwebtoken');
+const { AvailableSocialLogins, UserLoginType } = require('../constant');
+const {
+	ACCESS_TOKEN_SECRET,
+	ACCESS_TOKEN_EXPIRY,
+	REFRESH_TOKEN_SECRET,
+	REFRESH_TOKEN_EXPIRY,
+} = require('../config/serverConfig');
 module.exports = (sequelize, DataTypes) => {
 	class Player extends Model {
 		/**
@@ -8,6 +15,42 @@ module.exports = (sequelize, DataTypes) => {
 		 * This method is not a part of Sequelize lifecycle.
 		 * The `models/index` file will call this method automatically.
 		 */
+		async generateAccessToken() {
+			return new Promise((resolve, reject) => {
+				jwt.sign(
+					{
+						id: this.id,
+						email: this.email,
+					},
+					ACCESS_TOKEN_SECRET,
+					{ expiresIn: ACCESS_TOKEN_EXPIRY },
+					(err, token) => {
+						if (!err) {
+							return resolve(token);
+						}
+						reject(err);
+					}
+				);
+			});
+		}
+		async generateRefreshToken() {
+			return new Promise((resolve, reject) => {
+				jwt.sign(
+					{
+						id: this.id,
+						email: this.email,
+					},
+					REFRESH_TOKEN_SECRET,
+					{ expiresIn: REFRESH_TOKEN_EXPIRY },
+					(err, token) => {
+						if (!err) {
+							return resolve(token);
+						}
+						reject(err);
+					}
+				);
+			});
+		}
 		static associate(models) {
 			// define association here
 		}
@@ -42,6 +85,7 @@ module.exports = (sequelize, DataTypes) => {
 				type: DataTypes.ENUM,
 				values: AvailableSocialLogins,
 				allowNull: false,
+				defaultValue: UserLoginType.EMAIL_PASSWORD,
 			},
 			isEmailVerified: {
 				type: DataTypes.BOOLEAN,
