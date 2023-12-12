@@ -4,8 +4,10 @@ const UserLoginType = {
 	EMAIL_PASSWORD: 'EMAIL_PASSWORD',
 };
 const AvailableSocialLogins = Object.values(UserLoginType);
+const EMAIL_VERIFICATION_EXPIRY = 1000 * 60 * 30; //30 minutes
 module.exports = {
 	DB_NAME,
 	UserLoginType,
 	AvailableSocialLogins,
+	EMAIL_VERIFICATION_EXPIRY,
 };

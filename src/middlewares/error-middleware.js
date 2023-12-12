@@ -1,6 +1,6 @@
 const ApiError = require('../utils/ApiError');
 const { NODE_ENV } = require('../config/serverConfig');
-export const errorHandler = (err, _, res, __) => {
+const errorHandler = (err, _, res, __) => {
 	let error = err;
 	if (!(error instanceof ApiError)) {
 		const message = error.message || 'Something went wrong';
@@ -12,4 +12,8 @@ export const errorHandler = (err, _, res, __) => {
 		message: error.message,
 		...(NODE_ENV == 'development' ? { stack: error.stack } : {}),
 	});
+};
+
+module.exports = {
+	errorHandler,
 };
