@@ -67,6 +67,35 @@ const registerPlayer = asyncHandler(async (req, res, next) => {
 		.cookie('refreshToken', refreshToken, options)
 		.json(data);
 });
+
+const loginPlayer = asyncHandler(async (req, res, next) => {
+	const loginData = {
+		email: req.body.email || '',
+		name: req.body.name || '',
+		password: req.body.password,
+	};
+	const player = await playerService.loginPlayer(loginData);
+	const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
+		player.id
+	);
+	const data = {
+		id: player.id,
+		email: player.email,
+		avatar: player.avatar,
+		name: player.name,
+		isEmailVerified: player.isEmailVerified,
+		accessToken,
+		refreshToken,
+	};
+	const response = new ApiResponse('LoggedIn Successfully', 200, data);
+
+	return res
+		.status(200)
+		.cookie('accessToken', accessToken)
+		.cookie('refreshToken', refreshToken)
+		.json(response);
+});
 module.exports = {
 	registerPlayer,
+	loginPlayer,
 };

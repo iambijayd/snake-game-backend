@@ -1,6 +1,7 @@
 'use strict';
 const { Model } = require('sequelize');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const { AvailableSocialLogins, UserLoginType } = require('../constant');
 const {
 	ACCESS_TOKEN_SECRET,
@@ -50,6 +51,15 @@ module.exports = (sequelize, DataTypes) => {
 					}
 				);
 			});
+		}
+		async isPasswordCorrect(plainPassword) {
+			const hashedPassword = this.password;
+			console.log(hashedPassword);
+			const isPasswordCorrect = await bcrypt.compare(
+				plainPassword,
+				hashedPassword
+			);
+			return isPasswordCorrect;
 		}
 		static associate(models) {
 			// define association here
@@ -108,6 +118,17 @@ module.exports = (sequelize, DataTypes) => {
 			},
 		},
 		{
+			hooks: {
+				beforeCreate: async (player, options) => {
+					if (player.password) {
+						const hashedPassword = await bcrypt.hash(
+							player.password,
+							10
+						);
+						player.password = hashedPassword;
+					}
+				},
+			},
 			sequelize,
 			modelName: 'Player',
 		}
