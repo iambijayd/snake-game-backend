@@ -47,6 +47,10 @@ class PlayerService {
 		const player = await this.PlayerRepository.getPlayer(filter);
 		return player;
 	}
+	async createPlayer(data) {
+		const player = await this.PlayerRepository.createPlayer(data);
+		return player;
+	}
 }
 
 module.exports = PlayerService;

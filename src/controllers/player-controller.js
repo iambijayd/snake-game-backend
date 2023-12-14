@@ -95,7 +95,32 @@ const loginPlayer = asyncHandler(async (req, res, next) => {
 		.cookie('refreshToken', refreshToken)
 		.json(response);
 });
+const handleSocialLogin = asyncHandler(async (req, res, next) => {
+	const playerId = req.user?.id;
+	const player = await playerService.getPlayer({ id: playerId });
+	if (!player) {
+		throw new ApiError('Player donot exist', 404, []);
+	}
+	const { accessToken, refreshToken } =
+		await generateAccessAndRefreshToken(playerId);
+
+	const data = {
+		id: player.id,
+		email: player.email,
+		avatar: player.avatar,
+		name: player.name,
+		isEmailVerified: player.isEmailVerified,
+		accessToken,
+		refreshToken,
+	};
+	const response = new ApiResponse('LoggedIn Successfully', 200, data);
+	res.status(200)
+		.cookie('accessToken', accessToken)
+		.cookie('refreshToken', refreshToken)
+		.json(response);
+});
 module.exports = {
 	registerPlayer,
 	loginPlayer,
+	handleSocialLogin,
 };
