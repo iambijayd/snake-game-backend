@@ -5,7 +5,6 @@ const {
 	loginPlayer,
 	handleSocialLogin,
 } = require('../../controllers/player-controller');
-const { FAILURE_REDIRECTION_URL } = require('../../constant');
 require('../../passport');
 const router = express.Router();
 
