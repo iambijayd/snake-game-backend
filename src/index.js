@@ -10,6 +10,6 @@ process.on('uncaughtException', (err, origin) => {
 const httpServer = require('./app');
 const { PORT } = require('./config/serverConfig');
 
-httpServer.listen(PORT, () => {
+httpServer.listen(PORT, async () => {
 	console.log('Server listening on port %d', PORT);
 });

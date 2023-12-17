@@ -15,13 +15,29 @@ module.exports = (sequelize, DataTypes) => {
 		{
 			player1Id: {
 				type: DataTypes.INTEGER,
+				references: {
+					model: sequelize.Player,
+					key: 'id',
+				},
 			},
 			player2Id: {
 				type: DataTypes.INTEGER,
+				references: {
+					model: sequelize.Player,
+					key: 'id',
+				},
 			},
-			state: {
+			roomcode: {
 				type: DataTypes.STRING,
-				defaultValue: 'searching',
+				allowNull: false,
+			},
+			isSearching: {
+				type: DataTypes.BOOLEAN,
+				defaultValue: false,
+			},
+			isFinished: {
+				type: DataTypes.BOOLEAN,
+				defaultValue: false,
 			},
 		},
 		{
