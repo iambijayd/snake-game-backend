@@ -4,10 +4,11 @@ const PlayerService = require('../services/player-service');
 const { ACCESS_TOKEN_SECRET } = require('../config/serverConfig');
 const ApiError = require('../utils/ApiError');
 const playerService = PlayerService.getInstance();
-export const verifyJWT = asyncHandler(async (req, res, next) => {
+const verifyJWT = asyncHandler(async (req, res, next) => {
+	console.log(req.headers);
 	const token =
 		req.cookies?.accessToken ||
-		req.header?.['Authorization'].replace('Bearer ', '');
+		req.headers?.['authorization'].replace('Bearer ', '');
 	if (!token) {
 		throw new ApiError('Unauthorized request', 401);
 	}
@@ -21,3 +22,6 @@ export const verifyJWT = asyncHandler(async (req, res, next) => {
 		next(err);
 	}
 });
+module.exports = {
+	verifyJWT,
+};

@@ -14,7 +14,11 @@ const generateTemporaryToken = () => {
 
 	return { hashedToken, unHashedToken, emailVerificationExpiry };
 };
+const generateRandomCode = () => {
+	return Math.random().toString(36).substring(2, 8);
+};
 
 module.exports = {
 	generateTemporaryToken,
+	generateRandomCode,
 };
