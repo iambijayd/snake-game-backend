@@ -31,6 +31,11 @@ module.exports = (sequelize, DataTypes) => {
 				type: DataTypes.STRING,
 				allowNull: false,
 			},
+			duration: {
+				type: DataTypes.INTEGER,
+				allowNull: false,
+				defaultValue: 60,
+			},
 			isSearching: {
 				type: DataTypes.BOOLEAN,
 				defaultValue: false,
