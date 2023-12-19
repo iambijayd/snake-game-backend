@@ -12,8 +12,10 @@ const GOOGLE_CALLBACK_URL =
 const GameEventEnum = Object.freeze({
 	CONNECTED_EVENT: 'connected',
 	DISCONNECTED_EVENT: 'disconnected',
-	JOIN_MATCH_EVENT: 'joinMatch',
-	LEAVE_MATCH_EVENT: 'leaveMatch',
+	JOIN_ROOM_EVENT: 'joinRoom',
+	ROOM_FULL_EVENT: 'roomFull',
+	LEAVE_ROOM_EVENT: 'leaveRoom',
+	INITIATE_RTC_CONNECTION: 'initRTC',
 	SOCKET_ERROR_EVENT: 'socketError',
 });
 

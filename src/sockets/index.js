@@ -6,6 +6,26 @@ const { GameEventEnum } = require('../constant');
 const PlayerService = require('../services/player-service');
 const playerService = PlayerService.getInstance();
 
+const mountJoinRoomEvent = (socket, io) => {
+	/**
+	 * roomCode -> json object
+	 */
+	socket.on(GameEventEnum.JOIN_ROOM_EVENT, ({ roomCode }) => {
+		const room = io.sockets.adapter.rooms.get(roomCode); // returns Set()
+		if (!room || room?.size < 2) {
+			socket.join(roomCode);
+			if (room?.size == 2) {
+				socket.broadcast.emit(GameEventEnum.INITIATE_RTC_CONNECTION, {
+					message: `${socket.player.name} joined the game.`,
+				});
+			}
+		} else {
+			socket.emit(GameEventEnum.ROOM_FULL_EVENT, {
+				message: 'Room is Full',
+			});
+		}
+	});
+};
 const initializeSocketIo = (io) => {
 	return io.on('connection', async (socket) => {
 		try {
@@ -36,6 +56,7 @@ const initializeSocketIo = (io) => {
 				throw new ApiError('Invalid token', 401);
 			}
 			socket.player = player;
+			mountJoinRoomEvent(socket, io);
 		} catch (error) {
 			socket.emit(
 				GameEventEnum.SOCKET_ERROR_EVENT,
